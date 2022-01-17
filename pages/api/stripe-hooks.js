@@ -9,16 +9,12 @@ const handler = async (req, res) => {
   const signingSecret = process.env.STRIPE_SIGNING_SECRET;
   const reqBuffer = await buffer(req);
 
-  let event;
-
   try {
     stripe.webhooks.constructEvent(reqBuffer, signature, signingSecret);
   } catch (error) {
     console.log(error);
     return res.status(400).send(`Webhook error: ${error.message}`);
   }
-
-  console.log({ event });
 
   res.send({ received: true });
 };
